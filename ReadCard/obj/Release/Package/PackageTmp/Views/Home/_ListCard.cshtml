@@ -1,0 +1,79 @@
+﻿@using ReadCard.Data.Entities
+@using ReadCard.Models
+@{
+    if (ViewBag.ListCard != null && ((List<CCCDCardView>)ViewBag.ListCard).Count > 0)
+    {
+        foreach (var item in (List<CCCDCardView>)ViewBag.ListCard)
+        {
+            <section class="col-md-3 p-3 " aria-labelledby="gettingStartedTitle">
+                <div class="card m-auto" style="width: 18rem;">
+                    <img class="card-img-top img-thumbnail m-auto mt-2" style="max-width:200px;" src="data:image/png;base64,@item.CCCDCard.PersonDetails.faceImageBase64" alt="Card image cap">
+                    <div class="card-body">
+                        <span><strong>FullName: </strong> @item.CCCDCard.PersonDetails.surname  @item.CCCDCard.PersonDetails.name</span>
+                        <br />
+                        <span><strong>Gender: </strong> @item.CCCDCard.PersonDetails.gender</span>
+                        <br />
+                        <span><strong>IssuerAuthority: </strong> @item.CCCDCard.PersonDetails.issuerAuthority</span>
+                        <br />
+                        <span><strong>Nationality: </strong> @item.CCCDCard.PersonDetails.nationality</span>
+                        <br />
+                        <span><strong>PersonalNumber: </strong> @item.CCCDCard.PersonDetails.personalNumber</span>
+                        <br />
+                        <span><strong>SerialNumber: </strong> @item.CCCDCard.PersonDetails.serialNumber</span>
+                        <br />
+                        <span><strong>Surname: </strong> @item.CCCDCard.PersonDetails.surname</span>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-sm btn-danger btnDel" onclick="deleteCard(@item.ID);">
+                            <i class="fa fa-trash"></i> Xóa
+                        </button>
+                    </div>
+                </div>
+            </section>
+        }
+
+        <hr />
+        <section>
+            <button class="btn btn-sm btn-danger" id="btnDeleteAll" onclick="deleteAllCard();"><i class="fa fa-trash"></i> Xóa tất cả</button>
+        </section>
+    }
+}
+
+<script>
+    function deleteCard(itemId) {
+        $.ajax({
+            method: "GET",
+            url: '@Url.Action("DeleteItem", "Home")',
+            data: { iItemId: itemId },
+            contentType: 'application/html ; charset:utf-8',
+            dataType: 'html',
+            success: function (data) {
+                if (data >= 1) {
+                    console.log("Xóa thành công !");
+                }
+                else {
+                    console.log("Xóa thất bại !")
+                }
+
+            }
+        });
+    }
+
+    function deleteAllCard() {
+         $.ajax({
+            method: "GET",
+            url: '@Url.Action("DeleteAllItem", "Home")',
+            contentType: 'application/html ; charset:utf-8',
+            dataType: 'html',
+            success: function (data) {
+                if (data >= 1) {
+                    console.log("Xóa thành công !");
+                }
+                else {
+                    console.log("Xóa thất bại !")
+                }
+
+            }
+        });
+    }
+</script>

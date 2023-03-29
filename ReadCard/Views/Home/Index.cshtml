@@ -1,0 +1,36 @@
+﻿
+<main>
+    <div class="row mt-5 m-auto" id="divResult">
+        
+    </div>
+    @section Scripts{
+        <script type="text/javascript">
+            $(function () {
+                // Declare a proxy to reference the hub.
+                var notifications = $.connection.myHub;
+                // Start the connection.
+                $.connection.hub.start().done(function () {
+                    getCard();
+                }).fail(function (e) {
+                    alert(e);
+                });
+                notifications.client.getCard = function () {
+                    getCard();
+                };
+
+                function getCard() {
+                    $.ajax({
+                        method: "GET",
+                        url: '@Url.Action("GetCard", "Home")',
+                        contentType: 'application/html ; charset:utf-8',
+                        dataType: 'html',
+                        success: function (data) {
+                            $("#divResult").empty();
+                            $("#divResult").html(data);
+                        }
+                    });
+                }
+            });
+        </script>
+    }
+</main>

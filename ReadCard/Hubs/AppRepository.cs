@@ -40,6 +40,7 @@ namespace ReadCard.Hubs
                     {
                         CCCDCardView card = new CCCDCardView();
                         card.ID = Convert.ToInt32(reader["ID"].ToString());
+                        card.UploadTime = Convert.ToDateTime(reader["CREATED_DATE"].ToString());
                         card.CCCDCard = JsonConvert.DeserializeObject<CCCDCard>(reader["DATA"].ToString());
                         messages.Add(card);
                     }

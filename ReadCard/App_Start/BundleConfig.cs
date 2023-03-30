@@ -19,6 +19,12 @@ namespace ReadCard
             bundles.Add(new Bundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js"));
 
+          //  bundles.Add(new Bundle("~/bundles/signalrJe").Include(
+          //"~/Scripts/jquery.signalR-2.4.3.js"));
+
+          //  bundles.Add(new Bundle("~/bundles/signalrhub").Include(
+          //            "~/signalr/hubs"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));

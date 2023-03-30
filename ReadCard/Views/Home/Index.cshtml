@@ -1,22 +1,25 @@
 ﻿
 <main>
     <div class="row mt-5 m-auto" id="divResult">
-        
+
     </div>
     @section Scripts{
+        <script src="~/Scripts/jquery.signalR-2.4.3.js"></script>
+        <script src="~/signalr/hubs"></script>
         <script type="text/javascript">
             $(function () {
                 // Declare a proxy to reference the hub.
                 var notifications = $.connection.myHub;
+                notifications.client.getCard = function () {
+                    getCard();
+                };
                 // Start the connection.
                 $.connection.hub.start().done(function () {
                     getCard();
                 }).fail(function (e) {
                     alert(e);
                 });
-                notifications.client.getCard = function () {
-                    getCard();
-                };
+                
 
                 function getCard() {
                     $.ajax({

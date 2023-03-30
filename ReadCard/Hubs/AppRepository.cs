@@ -24,11 +24,13 @@ namespace ReadCard.Hubs
                 using (var command = new SqlCommand(@"SELECT [ID]
                                                       ,[DATA]
                                                       ,[CREATED_DATE]
-                                                  FROM [dbo].[CCCD] ORDER BY ID DESC", connection))
+                                                  FROM [dbo].[CCCD] ", connection))
                 {
                     command.Notification = null;
 
                     var dependency = new SqlDependency(command);
+
+                    //dependency.OnChange -= new OnChangeEventHandler(dependency_OnChange);
                     dependency.OnChange += new OnChangeEventHandler(dependency_OnChange);
 
                     if (connection.State == ConnectionState.Closed)
@@ -52,10 +54,17 @@ namespace ReadCard.Hubs
 
         private void dependency_OnChange(object sender, SqlNotificationEventArgs e)
         {
-            if (e.Type == SqlNotificationType.Change)
+
+            if (e.Type == SqlNotificationType.Change && (e.Info == SqlNotificationInfo.Insert || e.Info == SqlNotificationInfo.Update || e.Info == SqlNotificationInfo.Delete))
             {
                 MyHub.GetCard();
             }
+
+            // Giải phóng tài nguyên của SqlDependency
+            ((SqlDependency)sender).OnChange -= dependency_OnChange;
+
         }
+
+
     }
 }

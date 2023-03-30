@@ -1,27 +1,32 @@
-﻿
-<main>
-    <div class="row mt-5 m-auto" id="divResult">
+﻿<div class="row mt-5 m-auto" id="divResult">
 
-    </div>
-    @section Scripts{
-        <script src="~/Scripts/jquery.signalR-2.4.3.js"></script>
-        <script src="~/signalr/hubs"></script>
-        <script type="text/javascript">
+</div>
+
+
+@section Scripts{
+    <script src="~/Scripts/jquery.signalR-2.4.3.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script type="text/javascript">
             $(function () {
                 // Declare a proxy to reference the hub.
                 var notifications = $.connection.myHub;
                 notifications.client.getCard = function () {
-                    getCard();
+                    getCardData();
                 };
                 // Start the connection.
                 $.connection.hub.start().done(function () {
-                    getCard();
+                    getCardData();
                 }).fail(function (e) {
                     alert(e);
                 });
-                
 
-                function getCard() {
+
+                
+            });
+    </script>
+}
+<script>
+    function getCardData() {
                     $.ajax({
                         method: "GET",
                         url: '@Url.Action("GetCard", "Home")',
@@ -33,7 +38,4 @@
                         }
                     });
                 }
-            });
-        </script>
-    }
-</main>
+</script>

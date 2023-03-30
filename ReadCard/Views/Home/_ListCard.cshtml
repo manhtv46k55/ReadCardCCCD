@@ -5,41 +5,87 @@
     {
         <hr />
         <section>
-            <button class="btn btn-sm btn-danger" id="btnDeleteAll" onclick="deleteAllCard();"><i class="fa fa-trash"></i> Xóa tất cả</button>
+            <button class="btn btn-sm btn-danger mb-2 ml-0" id="btnDeleteAll" onclick="deleteAllCard();"><i class="fa fa-trash"></i> Xóa tất cả</button>
         </section>
         foreach (var item in (List<CCCDCardView>)ViewBag.ListCard)
         {
-            <section class="col-md-4 col-sm-12 col-lg-3 p-lg-3 col-xl-3 p-xl-3 mb-2 mt-2 p-0 m-auto" aria-labelledby="gettingStartedTitle">
-                <div class="card m-auto">
-                    <img class="card-img-top img-thumbnail m-auto mt-2" style="max-width:250px;" src="data:image/png;base64,@item.CCCDCard.PersonDetails.faceImageBase64" alt="Card image cap">
-                    <div class="card-body">
-                        <span><strong>Name: </strong>  @item.CCCDCard.PersonDetails.name</span>
-                        <br />
-                        <span><strong>Surname: </strong> @item.CCCDCard.PersonDetails.surname</span>
-                        <br />
-                        <span><strong>Gender: </strong> @item.CCCDCard.PersonDetails.gender</span>
-                        <br />
-                        <span><strong>IssuerAuthority: </strong> @item.CCCDCard.PersonDetails.issuerAuthority</span>
-                        <br />
-                        <span><strong>Nationality: </strong> @item.CCCDCard.PersonDetails.nationality</span>
-                        <br />
-                        <span><strong>PersonalNumber: </strong> @item.CCCDCard.PersonDetails.personalNumber</span>
-                        <br />
-                        <span><strong>SerialNumber: </strong> @item.CCCDCard.PersonDetails.serialNumber</span>
-                        <br />
-                        <span><strong>BirthDate: </strong> @item.CCCDCard.PersonDetails.birthDate</span>
-                        <br />
-                        <span><strong>ExpiryDate: </strong> @item.CCCDCard.PersonDetails.expiryDate</span>
-                        <br />
-                        <span><strong>UploadTime: </strong> @item.UploadTime.ToString("dd/MM/yyyy HH:mm:ss")</span>
+
+            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4 col-xxl-3">
+                <div class="card bg-light d-flex flex-fill">
+                    <div class="card-header text-muted border-bottom-0">
+                        <i class="fa fa-dot-circle-o"></i>  @item.CCCDCard.PersonDetails.personalNumber
+                    </div>
+                    <div class="card-body pt-0">
+                        <div class="row">
+                            <div class="col-md-4 col-lg-4 col-xl-4 pr-md-5 col-sm-12 m-sm-auto text-center">
+                                <img src="data:image/png;base64,@item.CCCDCard.PersonDetails.faceImageBase64" style="max-width:150px;" alt="user-avatar" class="img-thumbnail img-fluid">
+                            </div>
+                            <div class="col-md-8 col-lg-8 col-xl-8 col-sm-12 m-0 pl-md-5 pl-lg-5 pl-lg-3 pl-xl-3">
+
+                                <span><strong>Name: </strong>  @item.CCCDCard.PersonDetails.name</span>
+                                <br />
+                                <span><strong>Surname: </strong> @item.CCCDCard.PersonDetails.surname</span>
+                                <br />
+                                <span><strong>Gender: </strong> @item.CCCDCard.PersonDetails.gender</span>
+                                <br />
+                                <span><strong>IssuerAuthority: </strong> @item.CCCDCard.PersonDetails.issuerAuthority</span>
+                                <br />
+                                <span><strong>Nationality: </strong> @item.CCCDCard.PersonDetails.nationality</span>
+                                <br />
+                                <span><strong>PersonalNumber: </strong> @item.CCCDCard.PersonDetails.personalNumber</span>
+                                <br />
+                                <span><strong>SerialNumber: </strong> @item.CCCDCard.PersonDetails.serialNumber</span>
+                                <br />
+                                <span><strong>BirthDate: </strong> @item.CCCDCard.PersonDetails.birthDate</span>
+                                <br />
+                                <span><strong>ExpiryDate: </strong> @item.CCCDCard.PersonDetails.expiryDate</span>
+                                <br />
+                                <span><strong>UploadTime: </strong> @item.UploadTime.ToString("dd/MM/yyyy HH:mm:ss")</span>
+                            </div>
+
+                        </div>
                     </div>
                     <div class="card-footer">
-                        <button class="btn btn-sm btn-danger btnDel" onclick="deleteCard(@item.ID);">
-                            <i class="fa fa-trash"></i> Xóa
-                        </button>
+                        <div class="text-right">
+                            <button class="btn btn-sm btn-danger btnDel" onclick="deleteCard(@item.ID);">
+                                <i class="fa fa-trash"></i> Xóa
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </section>
+            </div>
+
+            @*<section class="col-md-4 col-sm-12 col-lg-3 p-lg-3 col-xl-3 p-xl-3 mb-2 mt-2 p-0 m-auto" aria-labelledby="gettingStartedTitle">
+                    <div class="card m-auto">
+                        <img class="card-img-top img-thumbnail m-auto mt-2" style="max-width:250px;" src="data:image/png;base64,@item.CCCDCard.PersonDetails.faceImageBase64" alt="Card image cap">
+                        <div class="card-body">
+                            <span><strong>Name: </strong>  @item.CCCDCard.PersonDetails.name</span>
+                            <br />
+                            <span><strong>Surname: </strong> @item.CCCDCard.PersonDetails.surname</span>
+                            <br />
+                            <span><strong>Gender: </strong> @item.CCCDCard.PersonDetails.gender</span>
+                            <br />
+                            <span><strong>IssuerAuthority: </strong> @item.CCCDCard.PersonDetails.issuerAuthority</span>
+                            <br />
+                            <span><strong>Nationality: </strong> @item.CCCDCard.PersonDetails.nationality</span>
+                            <br />
+                            <span><strong>PersonalNumber: </strong> @item.CCCDCard.PersonDetails.personalNumber</span>
+                            <br />
+                            <span><strong>SerialNumber: </strong> @item.CCCDCard.PersonDetails.serialNumber</span>
+                            <br />
+                            <span><strong>BirthDate: </strong> @item.CCCDCard.PersonDetails.birthDate</span>
+                            <br />
+                            <span><strong>ExpiryDate: </strong> @item.CCCDCard.PersonDetails.expiryDate</span>
+                            <br />
+                            <span><strong>UploadTime: </strong> @item.UploadTime.ToString("dd/MM/yyyy HH:mm:ss")</span>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-sm btn-danger btnDel" onclick="deleteCard(@item.ID);">
+                                <i class="fa fa-trash"></i> Xóa
+                            </button>
+                        </div>
+                    </div>
+                </section>*@
         }
 
 

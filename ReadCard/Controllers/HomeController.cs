@@ -24,7 +24,7 @@ namespace ReadCard.Controllers
         public ActionResult GetCard()
         {
             AppRepository _appRepository = new AppRepository();
-            ViewBag.ListCard = _appRepository.GetCard().ToList();
+            ViewBag.ListCard = _appRepository.GetCard().OrderByDescending(x=>x.ID).ToList();
             return PartialView("_ListCard");
         }
 

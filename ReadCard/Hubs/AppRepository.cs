@@ -14,6 +14,9 @@ namespace ReadCard.Hubs
     public class AppRepository
     {
         readonly string _connString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        private IEnumerable<CCCDCardView> _ListC = new List<CCCDCardView>();
+
+
 
         public IEnumerable<CCCDCardView> GetCard()
         {
@@ -21,49 +24,108 @@ namespace ReadCard.Hubs
             using (var connection = new SqlConnection(_connString))
             {
                 connection.Open();
-                using (var command = new SqlCommand(@"SELECT [ID]
-                                                      ,[DATA]
-                                                      ,[CREATED_DATE]
-                                                  FROM [dbo].[CCCD] ", connection))
+                using (var command = new SqlCommand(@" SELECT [ID]
+      ,[DATA]
+      ,[CREATED_DATE]
+  FROM [dbo].[CCCD] ", connection))
                 {
                     command.Notification = null;
 
                     var dependency = new SqlDependency(command);
-
-                    //dependency.OnChange -= new OnChangeEventHandler(dependency_OnChange);
                     dependency.OnChange += new OnChangeEventHandler(dependency_OnChange);
 
                     if (connection.State == ConnectionState.Closed)
-                        connection.Open();
-
-                    var reader = command.ExecuteReader();
-
-                    while (reader.Read())
                     {
-                        CCCDCardView card = new CCCDCardView();
-                        card.ID = Convert.ToInt32(reader["ID"].ToString());
-                        card.UploadTime = Convert.ToDateTime(reader["CREATED_DATE"].ToString());
-                        card.CCCDCard = JsonConvert.DeserializeObject<CCCDCard>(reader["DATA"].ToString());
-                        messages.Add(card);
+                        connection.Open();
+                    }
+                    var reader = command.ExecuteReader();
+                    if (reader.FieldCount > 0)
+                    {
+                        while (reader.Read())
+                        {
+                            CCCDCardView card = new CCCDCardView();
+                            card.ID = Convert.ToInt32(reader["ID"].ToString());
+                            card.UploadTime = Convert.ToDateTime(reader["CREATED_DATE"].ToString());
+                            card.CCCDCard = JsonConvert.DeserializeObject<CCCDCard>(reader["DATA"].ToString());
+                            messages.Add(card);
+                        }
                     }
                 }
-
+                messages = messages.OrderByDescending(x => x.ID).ToList();
+                _ListC = messages;
             }
             return messages;
         }
-
-        private void dependency_OnChange(object sender, SqlNotificationEventArgs e)
+        public void CallUpdateData()
         {
 
-            if (e.Type == SqlNotificationType.Change && (e.Info == SqlNotificationInfo.Insert || e.Info == SqlNotificationInfo.Update || e.Info == SqlNotificationInfo.Delete))
-            {
-                MyHub.GetCard();
-            }
-
-            // Giải phóng tài nguyên của SqlDependency
-            ((SqlDependency)sender).OnChange -= dependency_OnChange;
-
+            GetCard();
+            MyHub.GetCard(_ListC);
         }
+        private void dependency_OnChange(object sender, SqlNotificationEventArgs e)
+        {
+            // Fire the event
+            if (e.Type == SqlNotificationType.Change && (e.Info == SqlNotificationInfo.Insert || e.Info == SqlNotificationInfo.Delete))
+            //if (e.Type == SqlNotificationType.Change)
+            {
+                GetCard();
+                MyHub.GetCard(_ListC);
+
+            }
+        }
+
+
+        //readonly string _connString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+
+        //public IEnumerable<CCCDCardView> GetCard()
+        //{
+        //    var messages = new List<CCCDCardView>();
+        //    using (var connection = new SqlConnection(_connString))
+        //    {
+        //        connection.Open();
+        //        using (var command = new SqlCommand(@"SELECT [ID]
+        //                                              ,[DATA]
+        //                                              ,[CREATED_DATE]
+        //                                          FROM [dbo].[CCCD] ", connection))
+        //        {
+        //            command.Notification = null;
+
+        //            var dependency = new SqlDependency(command);
+
+        //            //dependency.OnChange -= new OnChangeEventHandler(dependency_OnChange);
+        //            dependency.OnChange += new OnChangeEventHandler(dependency_OnChange);
+
+        //            if (connection.State == ConnectionState.Closed)
+        //                connection.Open();
+
+        //            var reader = command.ExecuteReader();
+
+        //            while (reader.Read())
+        //            {
+        //                CCCDCardView card = new CCCDCardView();
+        //                card.ID = Convert.ToInt32(reader["ID"].ToString());
+        //                card.UploadTime = Convert.ToDateTime(reader["CREATED_DATE"].ToString());
+        //                card.CCCDCard = JsonConvert.DeserializeObject<CCCDCard>(reader["DATA"].ToString());
+        //                messages.Add(card);
+        //            }
+        //        }
+
+        //    }
+        //    return messages;
+        //}
+
+        //private void dependency_OnChange(object sender, SqlNotificationEventArgs e)
+        //{
+
+        //    if (e.Type == SqlNotificationType.Change && (e.Info == SqlNotificationInfo.Insert || e.Info == SqlNotificationInfo.Update || e.Info == SqlNotificationInfo.Delete))
+        //    {
+        //        MyHub.GetCard();
+        //    }
+
+        //    // Giải phóng tài nguyên của SqlDependency
+        //    ((SqlDependency)sender).OnChange -= dependency_OnChange;
+
+        //}
 
 
     }

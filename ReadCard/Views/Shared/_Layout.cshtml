@@ -8,7 +8,7 @@
     <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
     <!-- Theme style -->
     <link rel="stylesheet" href="~/Content/dist/css/adminlte.min.css">
-    
+
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
@@ -29,21 +29,21 @@
             </div>
         </nav>*@
     <div class="jumbotron">
-        
+
         @RenderBody()
 
         @*<hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>*@
+            <footer>
+                <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            </footer>*@
     </div>
 
     @Scripts.Render("~/bundles/jquery")
     @*@Scripts.Render("~/bundles/signalrJe")
         @Scripts.Render("~/bundles/signalrhub")*@
     @Scripts.Render("~/bundles/bootstrap")
-    @*<script src="~/Scripts/jquery.signalR-2.4.3.js"></script>
-        <script src="~/signalr/hubs"></script>*@
+    <script src="~/Scripts/jquery.signalR-2.4.3.js"></script>
+    <script src="~/signalr/hubs"></script>
     <!-- AdminLTE App -->
     <script src="~/Content/dist/js/adminlte.min.js"></script>
     <!-- AdminLTE for demo purposes -->

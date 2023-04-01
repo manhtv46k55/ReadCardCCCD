@@ -1,32 +1,105 @@
-﻿<div class="row mt-5 m-auto" id="divResult">
+﻿<section id="ssDelAllItem">
 
-</div>
+    <button class="btn btn-sm btn-danger mb-2 ml-0" id="btnDeleteAll" onclick="deleteAllCard();"><i class="fa fa-trash"></i> Xóa tất cả</button>
+    <hr />
+</section>
+<div class="row mt-5 m-auto" id="divResult"></div>
 
 
 @section Scripts{
-    <script src="~/Scripts/jquery.signalR-2.4.3.js"></script>
-    <script src="~/signalr/hubs"></script>
+    @*<script src="~/Scripts/jquery.signalR-2.4.3.min.js"></script>
+        <script src="~/signalr/hubs"></script>*@
     <script type="text/javascript">
-            $(function () {
-                // Declare a proxy to reference the hub.
-                var notifications = $.connection.myHub;
-                notifications.client.getCard = function () {
-                    getCardData();
-                };
-                // Start the connection.
-                $.connection.hub.start().done(function () {
-                    getCardData();
-                }).fail(function (e) {
-                    alert(e);
-                });
+        $(function () {
+            // Declare a proxy to reference the hub.
+            var notifications = $.connection.myHub;
+            notifications.client.getCard = function (ListC) {
+                const CheckobjectCards = ListC;
+                if (CheckobjectCards.length === 0) {
+                    $("#ssDelAllItem").css("display", "none");
+                    $("#divResult").empty();
+                }
+                else {
+                    $("#ssDelAllItem").css("display", "block");
+                    $("#divResult").empty();
+
+                    const objectCards = ListC;
+                    let htmlString = "";
+                    for (let i = 0; i < objectCards.length; i++) {
+
+                        htmlString += "<div class='col-sm-12 col-md-6 col-lg-6 col-xl-4 col-xxl-3'>";
+                        htmlString += "<div class='card bg-light d-flex flex-fill'>";
+                        htmlString += "<div class='card-header text-muted border-bottom-0'>";
+                        htmlString += "<i class='fa fa-dot-circle-o'></i>" + objectCards[i].CCCDCard.PersonDetails.personalNumber;
+                        htmlString += "</div>";
+                        htmlString += "<div class='card-body pt-0'>";
+                        htmlString += "<div class='row'>";
+                        htmlString += "<div class='col-md-4 col-lg-4 col-xl-4 pr-md-5 col-sm-12 m-sm-auto text-center'>";
+                        htmlString += "<img src='data:image/png;base64," + objectCards[i].CCCDCard.PersonDetails.faceImageBase64 + "' style='max-width:150px;' alt='user-avatar' class='img-thumbnail img-fluid'>";
+                        htmlString += "</div>";
+                        htmlString += "<div class='col-md-8 col-lg-8 col-xl-8 col-sm-12 m-0 pl-md-5 pl-lg-5 pl-lg-3 pl-xl-3'>";
+                        htmlString += " <span><strong>Name: </strong>" + objectCards[i].CCCDCard.PersonDetails.name + "</span>";
+                        htmlString += "<br />";
+                        htmlString += "<span><strong>Surname: </strong>" + objectCards[i].CCCDCard.PersonDetails.surname + "</span>";
+                        htmlString += "<br />";
+                        htmlString += "<span><strong>Gender: </strong>" + objectCards[i].CCCDCard.PersonDetails.gender + "</span>";
+                        htmlString += "<br />";
+                        htmlString += "<span><strong>IssuerAuthority: </strong>" + objectCards[i].CCCDCard.PersonDetails.issuerAuthority + "</span>";
+                        htmlString += "<br />";
+                        htmlString += "<span><strong>Nationality: </strong>" + objectCards[i].CCCDCard.PersonDetails.nationality + "</span>";
+                        htmlString += "<br />";
+                        htmlString += "<span><strong>PersonalNumber: </strong>" + objectCards[i].CCCDCard.PersonDetails.personalNumber + "</span>";
+                        htmlString += "<br />";
+                        htmlString += "<span><strong>SerialNumber: </strong>" + objectCards[i].CCCDCard.PersonDetails.serialNumber + "</span>";
+                        htmlString += "<br />";
+                        htmlString += "<span><strong>BirthDate: </strong>" + objectCards[i].CCCDCard.PersonDetails.birthDate + "</span>";
+                        htmlString += "<br />";
+                        htmlString += "<span><strong>ExpiryDate: </strong>" + objectCards[i].CCCDCard.PersonDetails.expiryDate + "</span>";
+                        htmlString += "<br />";
+
+                        const datetimeString = objectCards[i].UploadTime;
+                        const date = new Date(datetimeString);
+
+                        const formattedDate = `${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}-${date.getFullYear().toString()}`;
+
+                        htmlString += "<span><strong>UploadTime: </strong>" + formattedDate + "</span>";
+                        htmlString += "</div>";
+                        htmlString += "</div>";
+                        htmlString += "</div>";
+                        htmlString += "<div class='card-footer'>";
+                        htmlString += "<div class='text-right'>";
+                        htmlString += "<button class='btn btn-sm btn-danger btnDel' onclick='deleteCard(" + objectCards[i].ID + ");'>";
+                        htmlString += "<i class='fa fa-trash'></i> Xóa";
+                        htmlString += "</button>";
+                        htmlString += "</div>";
+                        htmlString += "</div>";
+                        htmlString += "</div>";
+                        htmlString += "</div>";
+                    }
+
+                    $("#divResult").html(htmlString);
+                }
 
 
-                
+                //console.log(ListC[0].CCCDCard.PersonDetails.birthDate);
+            };
+            // Start the connection.
+            $.connection.hub.start().done(function () {
+
+                getCardData();
+            }).fail(function (e) {
+                alert(e);
             });
-    </script>
-}
-<script>
-    function getCardData() {
+
+            const divContent = document.getElementById("divResult").innerHTML;
+            if (divContent.length === 0) {
+                $("#ssDelAllItem").css("display", "none");
+            } else {
+                $("#ssDelAllItem").css("display", "block");
+            }
+        });
+
+        function getCardData() {
                     $.ajax({
                         method: "GET",
                         url: '@Url.Action("GetCard", "Home")',
@@ -38,4 +111,45 @@
                         }
                     });
                 }
-</script>
+    </script>
+
+    <script>
+    function deleteCard(itemId) {
+        $.ajax({
+            method: "GET",
+            url: '@Url.Action("DeleteItem", "Home")',
+            data: { iItemId: itemId },
+            contentType: 'application/html ; charset:utf-8',
+            dataType: 'html',
+            success: function (data) {
+                if (data >= 1) {
+                    console.log("Xóa thành công !");
+                }
+                else {
+                    console.log("Xóa thất bại !");
+                }
+
+            }
+        });
+    }
+
+    function deleteAllCard() {
+         $.ajax({
+            method: "GET",
+            url: '@Url.Action("DeleteAllItem", "Home")',
+            contentType: 'application/html ; charset:utf-8',
+            dataType: 'html',
+            success: function (data) {
+                if (data >= 1) {
+                    console.log("Xóa thành công !");
+                }
+                else {
+                    console.log("Xóa thất bại !");
+                }
+
+            }
+        });
+    }
+    </script>
+
+}

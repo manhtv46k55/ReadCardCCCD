@@ -19,14 +19,19 @@ namespace ReadCard.Controllers
         {
             return View();
         }
-
-        [HttpGet]
-        public ActionResult GetCard()
+        public void GetCard()
         {
             AppRepository _appRepository = new AppRepository();
-            ViewBag.ListCard = _appRepository.GetCard().OrderByDescending(x=>x.ID).ToList();
-            return PartialView("_ListCard");
+            _appRepository.CallUpdateData();
+            //return PartialView("_ListCard");
         }
+        //[HttpGet]
+        //public ActionResult GetCard()
+        //{
+        //    AppRepository _appRepository = new AppRepository();
+        //    ViewBag.ListCard = _appRepository.GetCard().OrderByDescending(x=>x.ID).ToList();
+        //    return PartialView("_ListCard");
+        //}
 
         public int DeleteItem(int iItemID)
         {

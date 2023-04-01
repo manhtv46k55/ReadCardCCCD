@@ -1,9 +1,8 @@
-﻿<section id="ssDelAllItem">
-
-    <button class="btn btn-sm btn-danger mb-2 ml-0" id="btnDeleteAll" onclick="deleteAllCard();"><i class="fa fa-trash"></i> Xóa tất cả</button>
+﻿@*<div class="row" id="ssDelAllItem">
+    <button class="btn btn btn-danger mb-2" style="width:120px;" id="btnDeleteAll" onclick="deleteAllCard();"><i class="fa fa-trash"></i> Xóa tất cả</button>
     <hr />
-</section>
-<div class="row mt-5 m-auto" id="divResult"></div>
+</div>*@
+<div class="row m-auto" id="divResult"></div>
 
 
 @section Scripts{
@@ -16,63 +15,67 @@
             notifications.client.getCard = function (ListC) {
                 const CheckobjectCards = ListC;
                 if (CheckobjectCards.length === 0) {
-                    $("#ssDelAllItem").css("display", "none");
+                   /* $("#ssDelAllItem").css("display", "none");*/
                     $("#divResult").empty();
                 }
                 else {
-                    $("#ssDelAllItem").css("display", "block");
+                    /*$("#ssDelAllItem").css("display", "block");*/
                     $("#divResult").empty();
 
                     const objectCards = ListC;
                     let htmlString = "";
+                    htmlString += "<div class='row'>";
+                    htmlString += "<button class='btn btn btn-danger mb-2' style='width:150px;' id='btnDeleteAll' onclick='deleteAllCard();'><i class='fa fa-trash'></i> Delete all Item</button>";
+                    htmlString += "</div>";
                     for (let i = 0; i < objectCards.length; i++) {
-
-                        htmlString += "<div class='col-sm-12 col-md-6 col-lg-6 col-xl-4 col-xxl-3'>";
-                        htmlString += "<div class='card bg-light d-flex flex-fill'>";
-                        htmlString += "<div class='card-header text-muted border-bottom-0'>";
-                        htmlString += "<i class='fa fa-dot-circle-o'></i>" + objectCards[i].CCCDCard.PersonDetails.personalNumber;
-                        htmlString += "</div>";
-                        htmlString += "<div class='card-body pt-0'>";
-                        htmlString += "<div class='row'>";
-                        htmlString += "<div class='col-md-4 col-lg-4 col-xl-4 pr-md-5 col-sm-12 m-sm-auto text-center'>";
-                        htmlString += "<img src='data:image/png;base64," + objectCards[i].CCCDCard.PersonDetails.faceImageBase64 + "' style='max-width:150px;' alt='user-avatar' class='img-thumbnail img-fluid'>";
-                        htmlString += "</div>";
-                        htmlString += "<div class='col-md-8 col-lg-8 col-xl-8 col-sm-12 m-0 pl-md-5 pl-lg-5 pl-lg-3 pl-xl-3'>";
-                        htmlString += " <span><strong>Name: </strong>" + objectCards[i].CCCDCard.PersonDetails.name + "</span>";
-                        htmlString += "<br />";
-                        htmlString += "<span><strong>Surname: </strong>" + objectCards[i].CCCDCard.PersonDetails.surname + "</span>";
-                        htmlString += "<br />";
-                        htmlString += "<span><strong>Gender: </strong>" + objectCards[i].CCCDCard.PersonDetails.gender + "</span>";
-                        htmlString += "<br />";
-                        htmlString += "<span><strong>IssuerAuthority: </strong>" + objectCards[i].CCCDCard.PersonDetails.issuerAuthority + "</span>";
-                        htmlString += "<br />";
-                        htmlString += "<span><strong>Nationality: </strong>" + objectCards[i].CCCDCard.PersonDetails.nationality + "</span>";
-                        htmlString += "<br />";
-                        htmlString += "<span><strong>PersonalNumber: </strong>" + objectCards[i].CCCDCard.PersonDetails.personalNumber + "</span>";
-                        htmlString += "<br />";
-                        htmlString += "<span><strong>SerialNumber: </strong>" + objectCards[i].CCCDCard.PersonDetails.serialNumber + "</span>";
-                        htmlString += "<br />";
-                        htmlString += "<span><strong>BirthDate: </strong>" + objectCards[i].CCCDCard.PersonDetails.birthDate + "</span>";
-                        htmlString += "<br />";
-                        htmlString += "<span><strong>ExpiryDate: </strong>" + objectCards[i].CCCDCard.PersonDetails.expiryDate + "</span>";
-                        htmlString += "<br />";
 
                         const datetimeString = objectCards[i].UploadTime;
                         const date = new Date(datetimeString);
 
-                        const formattedDate = `${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}-${date.getFullYear().toString()}`;
+                        const formattedDate = `${date.getDate().toString().padStart(2, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getFullYear().toString()} ${(date.getHours()).toString().padStart(2, '0')}:${(date.getMinutes()).toString().padStart(2, '0')}:${(date.getSeconds()).toString().padStart(2, '0')}`;
 
-                        htmlString += "<span><strong>UploadTime: </strong>" + formattedDate + "</span>";
-                        htmlString += "</div>";
-                        htmlString += "</div>";
-                        htmlString += "</div>";
-                        htmlString += "<div class='card-footer'>";
-                        htmlString += "<div class='text-right'>";
-                        htmlString += "<button class='btn btn-sm btn-danger btnDel' onclick='deleteCard(" + objectCards[i].ID + ");'>";
-                        htmlString += "<i class='fa fa-trash'></i> Xóa";
+                        htmlString += "<div class='col-sm-12 col-md-12 col-lg-12 col-xl-4 col-xxl-4'>";
+                        htmlString += "<div class='card border-info bg-light d-flex flex-fill'>";
+                        htmlString += "<div class='card-header text-muted border-bottom mb-2'>";
+                        htmlString += "<i class='fa fa-dot-circle-o text-danger'> " + formattedDate + "</i>";
+                        /*htmlString += "<div class='text-right'>";*/
+                        htmlString += "<button class='btn btn-sm btn-danger btnDel float-right' onclick='deleteCard(" + objectCards[i].ID + ");'>";
+                        htmlString += "<i class='fa fa-times'></i>";
                         htmlString += "</button>";
+                       /* htmlString += "</div>";*/
+                        htmlString += "</div>";
+                        htmlString += "<div class='card-body pt-0 border-bottom'>";
+                        htmlString += "<div class='row'>";
+                        htmlString += "<div class='col-md-4 col-lg-4 col-xl-4 col-sm-12 m-sm-auto text-center'>";
+                        htmlString += "<img src='data:image/png;base64," + objectCards[i].CCCDCard.PersonDetails.faceImageBase64 + "' alt='avatar' class='img-thumbnail'>";
+                        htmlString += "</div>";
+                        htmlString += "</br>";
+                        htmlString += "<div class='col-md-8 col-lg-8 col-xl-8 col-sm-12 m-0 pl-lg-5 pl-lg-3 pl-xl-3 mt-3'>";
+                        
+                        htmlString += " <ul class='list-group list-group-flush'>";
+                        htmlString += "<li class='list-group-item p-0 m-0'>" + "Name: " + objectCards[i].CCCDCard.PersonDetails.name + "</li>";
+                        htmlString += "<li class='list-group-item p-0 m-0'>" + "Surname: " + objectCards[i].CCCDCard.PersonDetails.surname + "</li>";
+                        htmlString += "<li class='list-group-item p-0 m-0'>" + "Gender: " + objectCards[i].CCCDCard.PersonDetails.gender + "</li>";
+                        htmlString += "<li class='list-group-item p-0 m-0'>" + "IssuerAuthority: " + objectCards[i].CCCDCard.PersonDetails.issuerAuthority + "</li>";
+                        htmlString += "<li class='list-group-item p-0 m-0'>" + "Nationality: " + objectCards[i].CCCDCard.PersonDetails.nationality + "</li>";
+                        htmlString += "<li class='list-group-item p-0 m-0'>" + "PersonalNumber: " + objectCards[i].CCCDCard.PersonDetails.personalNumber + "</li>";
+                        htmlString += "<li class='list-group-item p-0 m-0'>" + "SerialNumber: " + objectCards[i].CCCDCard.PersonDetails.serialNumber + "</li>";
+                        htmlString += "<li class='list-group-item p-0 m-0'>" + "BirthDate: " + objectCards[i].CCCDCard.PersonDetails.birthDate + "</li>";
+                        htmlString += "<li class='list-group-item p-0 m-0'>" + "ExpiryDate: " + objectCards[i].CCCDCard.PersonDetails.expiryDate + "</li>";
+                        htmlString += "<li class='list-group-item p-0 m-0'>" + "Gender: " + objectCards[i].CCCDCard.PersonDetails.gender + "</li>";
+                        
+                        htmlString += "<li class='list-group-item p-0 m-0'>" + "UploadTime: " + formattedDate + "</li>";
+                       
                         htmlString += "</div>";
                         htmlString += "</div>";
+                        htmlString += "</div>";
+                        /*htmlString += "<div class='card-footer'>";*/
+                        //htmlString += "<div class='text-right'>";
+                        //htmlString += "<button class='btn btn-sm btn-danger btnDel' onclick='deleteCard(" + objectCards[i].ID + ");'>";
+                        //htmlString += "<i class='fa fa-times'></i>";
+                        //htmlString += "</button>";
+                        //htmlString += "</div>";
+                        //htmlString += "</div>";
                         htmlString += "</div>";
                         htmlString += "</div>";
                     }
